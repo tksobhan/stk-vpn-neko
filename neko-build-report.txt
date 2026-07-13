@@ -1,0 +1,653 @@
+===== GIT INFO =====
+origin	https://github.com/tksobhan/stk-vpn-neko.git (fetch)
+origin	https://github.com/tksobhan/stk-vpn-neko.git (push)
+main
+90d5785720b38e74127faf57f808ef0144775cef
+ M app/src/main/res/values-fa/strings.xml
+ M app/src/main/res/values-ru/strings.xml
+ M app/src/main/res/values-uk/strings.xml
+ M app/src/main/res/values/strings.xml
+?? neko-build-report.txt
+?? quick_rebrand.sh
+
+===== SUBMODULES =====
+No .gitmodules file
+
+===== ROOT FILES =====
+./app/build.gradle.kts
+./build.gradle.kts
+./buildSrc/build.gradle.kts
+./gradle.properties
+./nb4a.properties
+./repositories.gradle.kts
+./settings.gradle.kts
+
+===== ROOT build.gradle.kts =====
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+allprojects {
+    apply(from = "${rootProject.projectDir}/repositories.gradle.kts")
+}
+
+tasks.register<Delete>("clean") {
+    delete(rootProject.buildDir)
+}
+
+plugins {
+    id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
+}
+
+===== ROOT build.gradle =====
+FILE NOT FOUND
+
+===== settings.gradle.kts =====
+include(":app")
+rootProject.name = "NB4A"
+
+===== settings.gradle =====
+FILE NOT FOUND
+
+===== gradle.properties =====
+# Project-wide Gradle settings.
+# IDE (e.g. Android Studio) users:
+# Gradle settings configured through the IDE *will override*
+# any settings specified in this file.
+# For more details on how to configure your build environment visit
+# http://www.gradle.org/docs/current/userguide/build_environment.html
+# Specifies the JVM arguments used for the daemon process.
+# The setting is particularly useful for tweaking memory settings.
+org.gradle.jvmargs=-Xmx4g -XX:+UseParallelGC -Dfile.encoding=UTF-8
+# When configured, Gradle will run in incubating parallel mode.
+# This option should only be used with decoupled projects. More details, visit
+# http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects
+# org.gradle.parallel=true
+# AndroidX package structure to make it clearer which packages are bundled with the
+# Android operating system, and which are packaged with your app's APK
+# https://developer.android.com/topic/libraries/support-library/androidx-rn
+android.useAndroidX=true
+# Automatically convert third-party libraries to use AndroidX
+android.enableJetifier=true
+# Kotlin code style for this project: "official" or "obsolete":
+kotlin.code.style=official
+# Gradle parallel build
+org.gradle.parallel=true
+android.nonTransitiveRClass=false
+android.nonFinalResIds=false
+
+===== gradle/libs.versions.toml =====
+FILE NOT FOUND
+
+===== app/build.gradle.kts =====
+@file:Suppress("UnstableApiUsage")
+
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
+}
+
+setupApp()
+
+android {
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
+    ksp {
+        arg("room.incremental", "true")
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+        aidl = true
+    }
+    namespace = "io.nekohasekai.sagernet"
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+    androidResources {
+        generateLocaleConfig = true
+    }
+}
+
+dependencies {
+
+    implementation(fileTree("libs"))
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.0")
+    implementation("androidx.activity:activity-ktx:1.10.1")
+    implementation("androidx.fragment:fragment-ktx:1.5.6")
+    implementation("androidx.browser:browser:1.5.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("androidx.preference:preference-ktx:1.2.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("androidx.work:work-multiprocess:2.8.1")
+
+    implementation("com.google.android.material:material:1.8.0")
+    implementation("com.google.code.gson:gson:2.9.0")
+
+    implementation("com.github.jenly1314:zxing-lite:2.1.1")
+    implementation("com.blacksquircle.ui:editorkit:2.6.0")
+    implementation("com.blacksquircle.ui:language-base:2.6.0")
+    implementation("com.blacksquircle.ui:language-json:2.6.0")
+
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")
+    implementation("org.yaml:snakeyaml:1.30")
+    implementation("com.github.daniel-stoneuk:material-about-library:3.2.0-rc01")
+    implementation("com.jakewharton:process-phoenix:2.1.2")
+    implementation("com.esotericsoftware:kryo:5.2.1")
+    implementation("com.google.guava:guava:31.0.1-android")
+    implementation("org.ini4j:ini4j:0.5.4")
+
+    implementation("com.simplecityapps:recyclerview-fastscroll:2.0.1") {
+        exclude(group = "androidx.recyclerview")
+        exclude(group = "androidx.appcompat")
+    }
+
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("com.github.MatrixDev.Roomigrant:RoomigrantLib:0.3.4")
+    ksp("com.github.MatrixDev.Roomigrant:RoomigrantCompiler:0.3.4")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+}
+
+===== app/build.gradle =====
+FILE NOT FOUND
+
+===== nb4a.properties =====
+PACKAGE_NAME=moe.nb4a
+VERSION_NAME=1.4.2
+PRE_VERSION_NAME=pre-1.4.2-20260202-1
+VERSION_CODE=46
+
+===== app/nb4a.properties =====
+FILE NOT FOUND
+
+===== CURRENT WORKFLOW =====
+name: STK Neko Build APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: STK-Neko-Debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+===== LIBCORE FILE TREE =====
+libcore/.gitignore
+libcore/LICENSE
+libcore/assets.go
+libcore/assets_android.go
+libcore/assets_other.go
+libcore/box.go
+libcore/box_include.go
+libcore/build.sh
+libcore/certs.go
+libcore/crypto.go
+libcore/device/debug.go
+libcore/device/device.go
+libcore/dns_android.go
+libcore/dns_box.go
+libcore/ech/ech.go
+libcore/fix.go
+libcore/geoip.go
+libcore/geosite.go
+libcore/go.mod
+libcore/go.sum
+libcore/http.go
+libcore/init.sh
+libcore/interface_monitor.go
+libcore/io.go
+libcore/nb4a.go
+libcore/platform_box.go
+libcore/platform_java.go
+libcore/procfs/procfs.go
+libcore/stun.go
+libcore/stun/README
+libcore/stun/attribute.go
+libcore/stun/client.go
+libcore/stun/const.go
+libcore/stun/discover.go
+libcore/stun/doc.go
+libcore/stun/host.go
+libcore/stun/log.go
+libcore/stun/net.go
+libcore/stun/packet.go
+libcore/stun/response.go
+libcore/stun/tests.go
+libcore/stun/utils.go
+
+===== BUILDSCRIPT LIB/CORE TREE =====
+buildScript/lib/core/build.sh
+buildScript/lib/core/get_source.sh
+buildScript/lib/core/get_source_env.sh
+buildScript/lib/core/init.sh
+
+===== ALL RELEVANT SHELL SCRIPTS =====
+
+######## FILE: buildScript/copyLocal.sh ########
+#!/bin/sh
+# cp local.properties external/editorkit/
+# cp local.properties external/termux-view/
+
+######## FILE: buildScript/fdroid/prebuild.sh ########
+#!/bin/bash
+
+buildScript/init/action/gradle.sh
+
+# Build libcore
+buildScript/lib/core.sh
+
+######## FILE: buildScript/init/action/gradle.sh ########
+#!/bin/bash
+# Prepare script for Actions Gradle build
+set -e
+
+#### Download assets
+bash buildScript/lib/assets.sh
+
+exit
+
+#### Download "external" from Internet
+#rm -rf external
+#mkdir -p external
+#cd external
+#
+#echo "Downloading preferencex-android"
+#wget -q -O tmp.zip https://github.com/SagerNet/preferencex-android/archive/8bdb0c6ae44f378b073c6a1c850d03d729b70ff8.zip
+#unzip tmp.zip > /dev/null 2>&1
+#mv preferencex-android-* preferencex
+#
+#rm tmp.zip
+
+######## FILE: buildScript/init/env.sh ########
+#!/bin/bash
+
+source buildScript/init/env_ndk.sh
+
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+  export SRC_ROOT=$PWD
+else
+  export SRC_ROOT=$(realpath .)
+fi
+
+DEPS=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin
+
+export ANDROID_ARM_CC=$DEPS/armv7a-linux-androideabi21-clang
+export ANDROID_ARM_CXX=$DEPS/armv7a-linux-androideabi21-clang++
+export ANDROID_ARM_CC_21=$DEPS/armv7a-linux-androideabi21-clang
+export ANDROID_ARM_CXX_21=$DEPS/armv7a-linux-androideabi21-clang++
+export ANDROID_ARM_STRIP=$DEPS/arm-linux-androideabi-strip
+
+export ANDROID_ARM64_CC=$DEPS/aarch64-linux-android21-clang
+export ANDROID_ARM64_CXX=$DEPS/aarch64-linux-android21-clang++
+export ANDROID_ARM64_STRIP=$DEPS/aarch64-linux-android-strip
+
+export ANDROID_X86_CC=$DEPS/i686-linux-android21-clang
+export ANDROID_X86_CXX=$DEPS/i686-linux-android21-clang++
+export ANDROID_X86_CC_21=$DEPS/i686-linux-android21-clang
+export ANDROID_X86_CXX_21=$DEPS/i686-linux-android21-clang++
+export ANDROID_X86_STRIP=$DEPS/i686-linux-android-strip
+
+export ANDROID_X86_64_CC=$DEPS/x86_64-linux-android21-clang
+export ANDROID_X86_64_CXX=$DEPS/x86_64-linux-android21-clang++
+export ANDROID_X86_64_STRIP=$DEPS/x86_64-linux-android-strip
+
+######## FILE: buildScript/init/env_ndk.sh ########
+#!/bin/bash
+
+if [ -z "$ANDROID_HOME" ]; then
+  if [ -d "$HOME/Android/Sdk" ]; then
+    export ANDROID_HOME="$HOME/Android/Sdk"
+  elif [ -d "$HOME/.local/lib/android/sdk" ]; then
+    export ANDROID_HOME="$HOME/.local/lib/android/sdk"
+  elif [ -d "$HOME/Library/Android/sdk" ]; then
+    export ANDROID_HOME="$HOME/Library/Android/sdk"
+  fi
+fi
+
+_NDK="$ANDROID_HOME/ndk/25.0.8775105"
+[ -f "$_NDK/source.properties" ] || _NDK="$ANDROID_NDK_HOME"
+[ -f "$_NDK/source.properties" ] || _NDK="$NDK"
+[ -f "$_NDK/source.properties" ] || _NDK="$ANDROID_HOME/ndk-bundle"
+
+if [ ! -f "$_NDK/source.properties" ]; then
+  echo "Error: NDK not found."
+  exit 1
+fi
+
+export ANDROID_NDK_HOME=$_NDK
+export NDK=$_NDK
+
+######## FILE: buildScript/lib/assets.sh ########
+#!/bin/bash
+
+set -e
+
+DIR=app/src/main/assets/sing-box
+rm -rf $DIR
+mkdir -p $DIR
+cd $DIR
+
+get_latest_release() {
+  curl --silent "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
+    grep '"tag_name":' |                                            # Get tag line
+    sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
+}
+
+####
+VERSION_GEOIP=`get_latest_release "SagerNet/sing-geoip"`
+echo VERSION_GEOIP=$VERSION_GEOIP
+echo -n $VERSION_GEOIP > geoip.version.txt
+curl -fLSsO https://github.com/SagerNet/sing-geoip/releases/download/$VERSION_GEOIP/geoip.db
+xz -9 geoip.db
+
+####
+VERSION_GEOSITE=`get_latest_release "SagerNet/sing-geosite"`
+echo VERSION_GEOSITE=$VERSION_GEOSITE
+echo -n $VERSION_GEOSITE > geosite.version.txt
+curl -fLSsO https://github.com/SagerNet/sing-geosite/releases/download/$VERSION_GEOSITE/geosite.db
+xz -9 geosite.db
+
+######## FILE: buildScript/lib/core.sh ########
+#!/bin/bash
+
+buildScript/lib/core/init.sh
+buildScript/lib/core/build.sh
+######## FILE: buildScript/lib/core/build.sh ########
+#!/usr/bin/env bash
+
+source "buildScript/init/env.sh"
+export CGO_ENABLED=1
+export GO386=softfloat
+
+cd libcore
+rel=1 ./build.sh || exit 1
+
+######## FILE: buildScript/lib/core/get_source.sh ########
+#!/bin/bash
+set -e
+
+source "buildScript/init/env.sh"
+ENV_NB4A=1
+source "buildScript/lib/core/get_source_env.sh"
+pushd ..
+
+####
+
+if [ ! -d "sing-box" ]; then
+  git clone --no-checkout https://github.com/MatsuriDayo/sing-box.git
+fi
+pushd sing-box
+git checkout "$COMMIT_SING_BOX"
+popd
+
+####
+
+if [ ! -d "libneko" ]; then
+  git clone --no-checkout https://github.com/MatsuriDayo/libneko.git
+fi
+pushd libneko
+git checkout "$COMMIT_LIBNEKO"
+popd
+
+####
+
+popd
+
+######## FILE: buildScript/lib/core/get_source_env.sh ########
+export COMMIT_SING_BOX="aed32ee3066cdbc7d471e3e0415c5134088962df"
+export COMMIT_LIBNEKO="1c47a3af71990a7b2192e03292b4d246c308ef0b"
+
+######## FILE: buildScript/lib/core/init.sh ########
+#!/usr/bin/env bash
+
+source "buildScript/init/env.sh"
+
+# fetch soucre
+bash buildScript/lib/core/get_source.sh
+
+[ -f libcore/go.mod ] || exit 1
+cd libcore
+
+./init.sh || exit 1
+
+######## FILE: libcore/build.sh ########
+#!/bin/bash
+
+source ./env_java.sh || true
+source ../buildScript/init/env_ndk.sh
+
+BUILD=".build"
+
+rm -rf $BUILD/android \
+  $BUILD/java \
+  $BUILD/javac-output \
+  $BUILD/src
+
+if [ -z "$GOPATH" ]; then
+  GOPATH=$(go env GOPATH)
+fi
+
+export GOBIND=gobind-matsuri
+"$GOPATH"/bin/gomobile-matsuri bind -v -androidapi 21 -cache "$(realpath $BUILD)" -trimpath -ldflags='-s -w' -tags='with_conntrack,with_gvisor,with_quic,with_wireguard,with_utls,with_clash_api' . || exit 1
+rm -r libcore-sources.jar
+
+proj=../app/libs
+mkdir -p $proj
+cp -f libcore.aar $proj
+echo ">> install $(realpath $proj)/libcore.aar"
+
+######## FILE: libcore/init.sh ########
+#!/bin/bash
+
+chmod -R 777 .build 2>/dev/null
+rm -rf .build 2>/dev/null
+
+if [ -z "$GOPATH" ]; then
+    GOPATH=$(go env GOPATH)
+fi
+
+# Install gomobile
+if [ ! -f "$GOPATH/bin/gomobile-matsuri" ]; then
+    git clone https://github.com/MatsuriDayo/gomobile.git
+    pushd gomobile
+	git checkout origin/master2
+    pushd cmd
+    pushd gomobile
+    go install -v
+    popd
+    pushd gobind
+    go install -v
+    popd
+    popd
+    rm -rf gomobile
+    mv "$GOPATH/bin/gomobile" "$GOPATH/bin/gomobile-matsuri"
+    mv "$GOPATH/bin/gobind" "$GOPATH/bin/gobind-matsuri"
+fi
+
+GOBIND=gobind-matsuri gomobile-matsuri init
+
+===== LIBCORE GO.MOD =====
+module libcore
+
+go 1.23.1
+
+toolchain go1.23.6
+
+require (
+	github.com/matsuridayo/libneko v1.0.0 // replaced
+	github.com/miekg/dns v1.1.67
+	github.com/oschwald/maxminddb-golang v1.13.1
+	github.com/sagernet/quic-go v0.52.0-sing-box-mod.3
+	github.com/sagernet/sing v0.7.18
+	github.com/sagernet/sing-box v1.0.0 // replaced
+	github.com/sagernet/sing-tun v0.7.10
+	github.com/ulikunitz/xz v0.5.15
+	golang.org/x/mobile v0.0.0-20231108233038-35478a0c49da
+	golang.org/x/sys v0.35.0
+)
+
+require (
+	github.com/ajg/form v1.5.1 // indirect
+	github.com/andybalholm/brotli v1.1.0 // indirect
+	github.com/anytls/sing-anytls v0.0.11 // indirect
+	github.com/caddyserver/certmagic v0.23.0 // indirect
+	github.com/caddyserver/zerossl v0.1.3 // indirect
+	github.com/cretz/bine v0.2.0 // indirect
+	github.com/fsnotify/fsnotify v1.7.0 // indirect
+	github.com/go-chi/chi/v5 v5.2.2 // indirect
+	github.com/go-chi/render v1.0.3 // indirect
+	github.com/go-ole/go-ole v1.3.0 // indirect
+	github.com/gobwas/httphead v0.1.0 // indirect
+	github.com/gobwas/pool v0.2.1 // indirect
+	github.com/gofrs/uuid/v5 v5.3.2 // indirect
+	github.com/google/btree v1.1.3 // indirect
+	github.com/google/go-cmp v0.7.0 // indirect
+	github.com/hashicorp/yamux v0.1.2 // indirect
+	github.com/klauspost/compress v1.17.11 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
+	github.com/libdns/alidns v1.0.5-libdns.v1.beta1 // indirect
+	github.com/libdns/cloudflare v0.2.2-0.20250708034226-c574dccb31a6 // indirect
+	github.com/libdns/libdns v1.1.0 // indirect
+	github.com/logrusorgru/aurora v2.0.3+incompatible // indirect
+	github.com/mdlayher/netlink v1.7.3-0.20250113171957-fbb4dce95f42 // indirect
+	github.com/mdlayher/socket v0.5.1 // indirect
+	github.com/metacubex/tfo-go v0.0.0-20250921095601-b102db4216c0 // indirect
+	github.com/metacubex/utls v1.8.4 // indirect
+	github.com/mholt/acmez/v3 v3.1.2 // indirect
+	github.com/quic-go/qpack v0.5.1 // indirect
+	github.com/sagernet/bbolt v0.0.0-20231014093535-ea5cb2fe9f0a // indirect
+	github.com/sagernet/cors v1.2.1 // indirect
+	github.com/sagernet/fswatch v0.1.1 // indirect
+	github.com/sagernet/gvisor v0.0.0-20250325023245-7a9c0f5725fb // indirect
+	github.com/sagernet/netlink v0.0.0-20240612041022-b9a21c07ac6a // indirect
+	github.com/sagernet/nftables v0.3.0-beta.4 // indirect
+	github.com/sagernet/sing-mux v0.3.4 // indirect
+	github.com/sagernet/sing-quic v0.5.2 // indirect
+	github.com/sagernet/sing-shadowsocks v0.2.8 // indirect
+	github.com/sagernet/sing-shadowsocks2 v0.2.1 // indirect
+	github.com/sagernet/sing-shadowtls v0.2.1-0.20250503051639-fcd445d33c11 // indirect
+	github.com/sagernet/sing-vmess v0.2.7 // indirect
+	github.com/sagernet/smux v1.5.50-sing-box-mod.1 // indirect
+	github.com/sagernet/wireguard-go v0.0.1-beta.7 // indirect
+	github.com/sagernet/ws v0.0.0-20231204124109-acfe8907c854 // indirect
+	github.com/vishvananda/netns v0.0.5 // indirect
+	github.com/zeebo/blake3 v0.2.4 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
+	go.uber.org/zap v1.27.0 // indirect
+	go.uber.org/zap/exp v0.3.0 // indirect
+	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
+	golang.org/x/crypto v0.41.0 // indirect
+	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
+	golang.org/x/mod v0.27.0 // indirect
+	golang.org/x/net v0.43.0 // indirect
+	golang.org/x/sync v0.16.0 // indirect
+	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/time v0.9.0 // indirect
+	golang.org/x/tools v0.36.0 // indirect
+	golang.zx2c4.com/wintun v0.0.0-20230126152724-0fa3db229ce2 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250324211829-b45e905df463 // indirect
+	google.golang.org/grpc v1.73.0 // indirect
+	google.golang.org/protobuf v1.36.6 // indirect
+	lukechampine.com/blake3 v1.3.0 // indirect
+)
+
+replace github.com/matsuridayo/libneko => ../../libneko
+
+replace github.com/sagernet/sing-box => ../../sing-box
+
+===== LIBCORE GO.WORK =====
+FILE NOT FOUND
+
+===== REFERENCES IN GRADLE/SCRIPTS =====
+./.github/workflows/preview.yml:6:  libcore:
+./.github/workflows/preview.yml:13:        run: find buildScript libcore/*.sh | xargs cat | sha1sum > golang_status
+./.github/workflows/preview.yml:15:        run: git ls-files libcore | xargs cat | sha1sum > libcore_status
+./.github/workflows/preview.yml:21:            app/libs/libcore.aar
+./.github/workflows/preview.yml:22:          key: ${{ hashFiles('.github/workflows/*', 'golang_status', 'libcore_status') }}
+./.github/workflows/preview.yml:27:          go-version: ^1.25
+./.github/workflows/preview.yml:35:      - libcore
+./.github/workflows/preview.yml:40:        run: find buildScript libcore/*.sh | xargs cat | sha1sum > golang_status
+./.github/workflows/preview.yml:42:        run: git ls-files libcore | xargs cat | sha1sum > libcore_status
+./.github/workflows/preview.yml:47:            app/libs/libcore.aar
+./.github/workflows/preview.yml:48:          key: ${{ hashFiles('.github/workflows/*', 'golang_status', 'libcore_status') }}
+./.github/workflows/release.yml:15:  libcore:
+./.github/workflows/release.yml:22:        run: find buildScript libcore/*.sh | xargs cat | sha1sum > golang_status
+./.github/workflows/release.yml:24:        run: git ls-files libcore | xargs cat | sha1sum > libcore_status
+./.github/workflows/release.yml:30:            app/libs/libcore.aar
+./.github/workflows/release.yml:31:          key: ${{ hashFiles('.github/workflows/*', 'golang_status', 'libcore_status') }}
+./.github/workflows/release.yml:36:          go-version: ^1.25
+./.github/workflows/release.yml:44:      - libcore
+./.github/workflows/release.yml:49:        run: find buildScript libcore/*.sh | xargs cat | sha1sum > golang_status
+./.github/workflows/release.yml:51:        run: git ls-files libcore | xargs cat | sha1sum > libcore_status
+./.github/workflows/release.yml:56:            app/libs/libcore.aar
+./.github/workflows/release.yml:57:          key: ${{ hashFiles('.github/workflows/*', 'golang_status', 'libcore_status') }}
+./.github/workflows/release.yml:105:      - libcore
+./.github/workflows/release.yml:110:        run: find buildScript libcore/*.sh | xargs cat | sha1sum > golang_status
+./.github/workflows/release.yml:112:        run: git ls-files libcore | xargs cat | sha1sum > libcore_status
+./.github/workflows/release.yml:117:            app/libs/libcore.aar
+./.github/workflows/release.yml:118:          key: ${{ hashFiles('.github/workflows/*', 'golang_status', 'libcore_status') }}
+./app/build.gradle.kts:32:        jniLibs {
+./buildScript/fdroid/prebuild.sh:5:# Build libcore
+./buildScript/fdroid/prebuild.sh:6:buildScript/lib/core.sh
+./buildScript/init/env.sh:19:export ANDROID_ARM64_CC=$DEPS/aarch64-linux-android21-clang
+./buildScript/init/env.sh:20:export ANDROID_ARM64_CXX=$DEPS/aarch64-linux-android21-clang++
+./buildScript/init/env.sh:21:export ANDROID_ARM64_STRIP=$DEPS/aarch64-linux-android-strip
+./buildScript/lib/core.sh:3:buildScript/lib/core/init.sh
+./buildScript/lib/core.sh:4:buildScript/lib/core/build.sh
+./buildScript/lib/core/build.sh:7:cd libcore
+./buildScript/lib/core/get_source.sh:5:ENV_NB4A=1
+./buildScript/lib/core/get_source.sh:6:source "buildScript/lib/core/get_source_env.sh"
+./buildScript/lib/core/init.sh:6:bash buildScript/lib/core/get_source.sh
+./buildScript/lib/core/init.sh:8:[ -f libcore/go.mod ] || exit 1
+./buildScript/lib/core/init.sh:9:cd libcore
+./libcore/build.sh:17:export GOBIND=gobind-matsuri
+./libcore/build.sh:18:"$GOPATH"/bin/gomobile-matsuri bind -v -androidapi 21 -cache "$(realpath $BUILD)" -trimpath -ldflags='-s -w' -tags='with_conntrack,with_gvisor,with_quic,with_wireguard,with_utls,with_clash_api' . || exit 1
+./libcore/build.sh:19:rm -r libcore-sources.jar
+./libcore/build.sh:23:cp -f libcore.aar $proj
+./libcore/build.sh:24:echo ">> install $(realpath $proj)/libcore.aar"
+./libcore/init.sh:10:# Install gomobile
+./libcore/init.sh:11:if [ ! -f "$GOPATH/bin/gomobile-matsuri" ]; then
+./libcore/init.sh:12:    git clone https://github.com/MatsuriDayo/gomobile.git
+./libcore/init.sh:13:    pushd gomobile
+./libcore/init.sh:16:    pushd gomobile
+./libcore/init.sh:19:    pushd gobind
+./libcore/init.sh:23:    rm -rf gomobile
+./libcore/init.sh:24:    mv "$GOPATH/bin/gomobile" "$GOPATH/bin/gomobile-matsuri"
+./libcore/init.sh:25:    mv "$GOPATH/bin/gobind" "$GOPATH/bin/gobind-matsuri"
+./libcore/init.sh:28:GOBIND=gobind-matsuri gomobile-matsuri init
+./settings.gradle.kts:2:rootProject.name = "NB4A"
