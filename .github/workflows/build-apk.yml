@@ -28,11 +28,11 @@ jobs:
       - name: Setup Android SDK (Minimal)
         uses: android-actions/setup-android@v3
         with:
-          # اینجا فقط ابزارهای پایه بیلد رو می‌گیریم و امولاتور رو فاکتور می‌گیریم
           packages: 'platforms;android-34 build-tools;34.0.0 platform-tools'
 
       - name: Install Specific NDK Version
         run: |
+          yes | sdkmanager --licenses
           sdkmanager --install "ndk;25.0.8775105"
           echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.0.8775105" >> $GITHUB_ENV
           echo "NDK=$ANDROID_SDK_ROOT/ndk/25.0.8775105" >> $GITHUB_ENV
@@ -57,10 +57,21 @@ jobs:
         env:
           ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
           NDK: ${{ env.NDK }}
-        run: ./gradlew assembleDebug
+        run: |
+          ./gradlew assembleDebug --stacktrace
+
+      - name: Show generated APKs
+        run: |
+          echo "Searching for APK files..."
+          find . -type f \( -name "*.apk" -o -name "*.aab" \) | sort || true
+          echo "Listing app/build/outputs ..."
+          ls -R app/build/outputs || true
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
-          name: STK-Neko-APKs
-          path: app/build/outputs/apk/debug/**/*.apk
+          name: STK-Neko-build-outputs
+          path: |
+            **/*.apk
+            **/*.aab
+          if-no-files-found: warn
