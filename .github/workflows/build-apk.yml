@@ -25,8 +25,11 @@ jobs:
           go-version: '1.23'
           cache: false
 
-      - name: Setup Android NDK
+      - name: Setup Android SDK (Minimal)
         uses: android-actions/setup-android@v3
+        with:
+          # اینجا فقط ابزارهای پایه بیلد رو می‌گیریم و امولاتور رو فاکتور می‌گیریم
+          packages: 'platforms;android-34 build-tools;34.0.0 platform-tools'
 
       - name: Install Specific NDK Version
         run: |
